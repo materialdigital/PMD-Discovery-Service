@@ -1,16 +1,4 @@
-#! /usr/bin/env bash
-
-# DATABASE_PASSWORD="$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c"${1:-128}")"
-# KEYCLOAK_ADMIN_PASSWORD="$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c"${1:-128}")"
-# KEYCLOAK_USER_PASSWORD="$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c"${1:-128}")"
-# PASS_STR="$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c"${1:-128}")"
-# sed -e "s/\[password\]/${PASS_STR:0:64}/" -e "s/\[db password\]/${PASS_STR:64}/" -e "s/\[admin password\]/${PASS_STR:64}/" templates/keycloak_config.json > config.json
-
-# INITIAL_ACCESS_TOKEN=$(ACCESS_TOKEN=$(docker compose -v run --entrypoint=sh curl -c 'curl -s $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=$KEYCLOAK_CLIENT -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD' | docker compose run -T jq -r '.access_token') docker compose run --entrypoint=sh curl -c 'curl -s -H "Authorization: Bearer $ACCESS_TOKEN" ${KEYCLOAK_URL}admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 60 }"' | docker compose run -T jq -r '.token')
-
-
 #! /bin/sh
-# test –f /usr/bin/sshd || exit 0
 case "$1" in
     start)
         
