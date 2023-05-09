@@ -1,0 +1,69 @@
+services:
+  keycloak-db:
+    image: postgres:12
+    volumes:
+      - keycloak_postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - internal
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command:
+      - start-dev
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=keycloak-db
+      - DB_SCHEMA=public
+      - DB_DATABASE=${DATABASE_NAME}
+      - DB_USER=${DATABASE_USER}
+      - DB_PASSWORD=${DATABASE_PASSWORD}
+      - KEYCLOAK_USER
+      - KEYCLOAK_PASSWORD
+      - KEYCLOAK_ADMIN
+      - KEYCLOAK_ADMIN_PASSWORD
+    depends_on:
+      - keycloak-db
+    networks:
+      - internal
+      - default
+      - pmd-ds
+    ports:
+      - 8443:8443
+      - 8080:8080
+
+# Workaround due to issue https://github.com/keycloak/keycloak/issues/20215
+# This is incredibly hacky and should be removed as soon as the issue is fixed
+# The correct solution involves kcadm.sh and the --filter parameter
+  curl:
+    image: curlimages/curl
+    profiles:
+      - "optional"
+    depends_on:
+      - keycloak
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=master
+      - KEYCLOAK_CLIENT=admin-cli
+      - KEYCLOAK_ADMIN
+      - KEYCLOAK_ADMIN_PASSWORD
+      - ACCESS_TOKEN
+  
+  jq:
+    image: stedolan/jq
+    profiles:
+      - "optional"
+    networks:
+      - jail
+
+volumes:
+  keycloak_postgres:
+    driver: local
+
+networks:
+  pmd-ds:
+  jail:
+  internal:
