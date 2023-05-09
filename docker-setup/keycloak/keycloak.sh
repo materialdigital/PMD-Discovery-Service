@@ -45,8 +45,8 @@ case "$1" in
         docker compose down
     ;;
     clean)
-        echo "Removing keycloak's docker container, volumes and networks"
-        docker compose down --volumes
+        echo "Removing keycloak's docker volumes"
+        docker compose rm --volumes
     ;;
     
     get-iat)
@@ -68,7 +68,7 @@ case "$1" in
         echo "Usage: $0 {start|stop|clean|get-iat}"
         echo "  start:    starts keycloak"
         echo "  stop:     stops keycloak"
-        echo "  clean:    removes keycloak containers, volumes and networks"
+        echo "  clean:    removes keycloak docker volumes"
         echo "  get-iat:  return an initial access token"
         exit 1
     ;;
