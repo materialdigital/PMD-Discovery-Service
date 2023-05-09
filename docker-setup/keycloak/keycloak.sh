@@ -73,4 +73,13 @@ case "$1" in
         INITIAL_ACCESS_TOKEN=$(docker compose run --entrypoint=sh curl -c 'curl -s -H "Authorization: Bearer $ACCESS_TOKEN" $KEYCLOAK_URL/admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 60 }"' | docker compose run -T jq -r '.token')
         echo "$INITIAL_ACCESS_TOKEN"
     ;;
+    
+    *)
+        echo "Usage: $0 {start|stop|clean|get-iat}"
+        echo "start: starts keycloak"
+        echo "stop: stops keycloak"
+        echo "clean: removes keycloak containers, volumes and networks"
+        echo "get-iat: return an initial access token"
+        exit 1
+    ;;
 esac
