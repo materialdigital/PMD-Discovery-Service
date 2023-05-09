@@ -44,11 +44,13 @@ case "$1" in
             sed -i -e "s/\(DATABASE_PASSWORD=\).*/\1$DATABASE_PASSWORD/" .env
             sed -i -e "s/\(KEYCLOAK_ADMIN_PASSWORD=\).*/\1$KEYCLOAK_ADMIN_PASSWORD/" .env
             sed -i -e "s/\(KEYCLOAK_USER_PASSWORD=\).*/\1$KEYCLOAK_USER_PASSWORD/" .env
+
+            echo "Passwords generated and saved in .env file for sequential runs"
         fi
         
         
         echo "Starting keycloak"
-        # docker compose up -d
+        docker compose up -d
     ;;
     stop)
         echo "Stopping keycloak"
