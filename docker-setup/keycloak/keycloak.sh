@@ -36,14 +36,14 @@ case "$1" in
             export KEYCLOAK_ADMIN_PASSWORD
             echo "Admin password: $KEYCLOAK_ADMIN_PASSWORD"
             
-            KEYCLOAK_USER_PASSWORD=$(echo "$PASS_STR" | cut -c 129-192)
-            export KEYCLOAK_USER_PASSWORD
-            echo "User password: $KEYCLOAK_USER_PASSWORD"
+            KEYCLOAK_PASSWORD=$(echo "$PASS_STR" | cut -c 129-192)
+            export KEYCLOAK_PASSWORD
+            echo "User password: $KEYCLOAK_PASSWORD"
 
             # overwrite the passwords in the .env file
             sed -i -e "s/\(DATABASE_PASSWORD=\).*/\1$DATABASE_PASSWORD/" .env
             sed -i -e "s/\(KEYCLOAK_ADMIN_PASSWORD=\).*/\1$KEYCLOAK_ADMIN_PASSWORD/" .env
-            sed -i -e "s/\(KEYCLOAK_USER_PASSWORD=\).*/\1$KEYCLOAK_USER_PASSWORD/" .env
+            sed -i -e "s/\(KEYCLOAK_PASSWORD=\).*/\1$KEYCLOAK_PASSWORD/" .env
 
             echo "Passwords generated and saved in .env file for sequential runs"
         fi
