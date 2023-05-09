@@ -39,12 +39,12 @@ case "$1" in
             KEYCLOAK_PASSWORD=$(echo "$PASS_STR" | cut -c 129-192)
             export KEYCLOAK_PASSWORD
             echo "User password: $KEYCLOAK_PASSWORD"
-
+            
             # overwrite the passwords in the .env file
             sed -i -e "s/\(DATABASE_PASSWORD=\).*/\1$DATABASE_PASSWORD/" .env
             sed -i -e "s/\(KEYCLOAK_ADMIN_PASSWORD=\).*/\1$KEYCLOAK_ADMIN_PASSWORD/" .env
             sed -i -e "s/\(KEYCLOAK_PASSWORD=\).*/\1$KEYCLOAK_PASSWORD/" .env
-
+            
             echo "Passwords generated and saved in .env file for sequential runs"
         fi
         
@@ -76,10 +76,10 @@ case "$1" in
     
     *)
         echo "Usage: $0 {start|stop|clean|get-iat}"
-        echo "start: starts keycloak"
-        echo "stop: stops keycloak"
-        echo "clean: removes keycloak containers, volumes and networks"
-        echo "get-iat: return an initial access token"
+        echo "  start:    starts keycloak"
+        echo "  stop:     stops keycloak"
+        echo "  clean:    removes keycloak containers, volumes and networks"
+        echo "  get-iat:  return an initial access token"
         exit 1
     ;;
 esac
