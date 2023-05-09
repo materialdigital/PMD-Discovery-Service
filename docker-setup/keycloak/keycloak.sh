@@ -57,7 +57,7 @@ case "$1" in
         docker compose down
     ;;
     clean)
-        echo "Removing keycloak junk"
+        echo "Removing keycloak's docker container, volumes and networks"
         docker compose down --volumes
     ;;
     
