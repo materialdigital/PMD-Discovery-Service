@@ -20,7 +20,7 @@ case "$1" in
         # if passwords are generated, overwrite them inside .env file
         
         . ./.env
-        if [ -z "$DATABASE_PASSWORD" ]; then
+        if [ -z "$DATABASE_PASSWORD" ] || [ -z "$KEYCLOAK_ADMIN_PASSWORD" ] || [ -z "$KEYCLOAK_PASSWORD" ] ; then
             echo "Generating passwords"
             PASS_STR="$(shift; < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c"${1:-192}")"
             # split the password string into 3 parts
