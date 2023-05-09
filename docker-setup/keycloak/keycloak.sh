@@ -60,6 +60,17 @@ case "$1" in
         echo "Removing keycloak junk"
         docker compose down --volumes
     ;;
-    #    restart)
-    #           ;;
+    
+    get-iat)
+        # return an initial access token
+        # this token is used to create clients
+        # this token is valid for 60 seconds
+        # this token is generated only once
+        
+        ACCESS_TOKEN=$(docker compose -v run --entrypoint=sh curl -c 'curl -s $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=$KEYCLOAK_CLIENT -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD' | docker compose run -T jq -r '.access_token')
+        export ACCESS_TOKEN
+        
+        INITIAL_ACCESS_TOKEN=$(docker compose run --entrypoint=sh curl -c 'curl -s -H "Authorization: Bearer $ACCESS_TOKEN" $KEYCLOAK_URL/admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 60 }"' | docker compose run -T jq -r '.token')
+        echo "$INITIAL_ACCESS_TOKEN"
+    ;;
 esac
