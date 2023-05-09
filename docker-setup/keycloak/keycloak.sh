@@ -16,6 +16,7 @@ case "$1" in
             # 2. admin password
             # 3. user password
             
+            # use cut instead of substring because substring is not POSIX compliant
             DATABASE_PASSWORD=$(echo "$PASS_STR" | cut -c 1-64)
             export DATABASE_PASSWORD
             echo "Database password: $DATABASE_PASSWORD"
