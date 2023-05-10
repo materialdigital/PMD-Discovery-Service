@@ -1,6 +1,6 @@
 #! /bin/sh
 case "$1" in
-    start)
+    start | up)
         
         # read passowrds from .env file and check if they are set
         # if not set or empty, generate them
@@ -49,11 +49,11 @@ case "$1" in
         echo "Starting keycloak"
         docker compose up -d
     ;;
-    stop)
+    stop | down)
         echo "Stopping keycloak"
         docker compose down
     ;;
-    clean)
+    clean | rm)
         echo "Removing keycloak's docker volumes"
         docker compose rm --volumes
     ;;
