@@ -65,7 +65,7 @@ case "$1" in
         # this token is generated only once
         
         ACCESS_TOKEN=$(docker compose -v run --entrypoint=sh curl -c 'curl -s $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=$KEYCLOAK_CLIENT -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD' | docker compose run -T jq -r '.access_token')
-
+        
         # we need to export the access token so that it can be used inside the container
         export ACCESS_TOKEN
         
