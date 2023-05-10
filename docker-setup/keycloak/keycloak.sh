@@ -37,6 +37,14 @@ case "$1" in
             echo "Passwords generated and saved in .env file for sequential runs"
         fi
         
+        # use external network if it exists
+        
+        if [ "$(docker network ls --filter name=pmd-ds -q)" ]; then
+            USE_EXTERNAL_PMD_DS_NETWORK="true"
+            export USE_EXTERNAL_PMD_DS_NETWORK
+            # echo "Creating network pmd-ds"
+            # docker network create pmd-ds
+        fi
         
         echo "Starting keycloak"
         docker compose up -d
