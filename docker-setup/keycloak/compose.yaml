@@ -14,7 +14,8 @@ services:
     build:
       dockerfile: Dockerfile
     command: ["start", "--optimized", "--http-enabled", "true"]
-        # - start-dev
+    # command: 
+    #   - start-dev
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=keycloak-db
