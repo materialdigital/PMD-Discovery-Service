@@ -11,9 +11,10 @@ services:
       - internal
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    command:
-      - start-dev
+    build:
+      dockerfile: Dockerfile
+    command: ["start", "--optimized", "--http-enabled", "true"]
+        # - start-dev
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=keycloak-db
@@ -25,41 +26,16 @@ services:
       - KEYCLOAK_PASSWORD
       - KEYCLOAK_ADMIN
       - KEYCLOAK_ADMIN_PASSWORD
+      - KEYCLOAK_CLIENT=admin-cli
+      - KEYCLOAK_REALM=master
     depends_on:
       - keycloak-db
     networks:
       - internal
-      - default
       - pmd-ds
     ports:
       - 8443:8443
       - 8080:8080
-
-# Workaround due to issue https://github.com/keycloak/keycloak/issues/20215
-# This is incredibly hacky and should be removed as soon as the issue is fixed
-# The correct solution involves kcadm.sh and the --filter parameter
-  curl:
-    image: curlimages/curl
-    profiles:
-      - "optional"
-    depends_on:
-      - keycloak
-    environment:
-      - KEYCLOAK_URL=http://keycloak:8080
-      - KEYCLOAK_REALM=master
-      - KEYCLOAK_CLIENT=admin-cli
-      - KEYCLOAK_ADMIN
-      - KEYCLOAK_ADMIN_PASSWORD
-      - ACCESS_TOKEN
-    networks:
-      - internal
-  
-  jq:
-    image: stedolan/jq
-    profiles:
-      - "optional"
-    networks:
-      - jail
 
 volumes:
   keycloak_postgres:
@@ -68,5 +44,4 @@ volumes:
 networks:
   pmd-ds:
     external: ${USE_EXTERNAL_PMD_DS_NETWORK}
-  jail:
   internal:
