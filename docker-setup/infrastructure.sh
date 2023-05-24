@@ -47,11 +47,12 @@ case "$1" in
         
         cd .. || exit 1
         
-        # #start ontodocker
-        # (
-        #     cd ontodocker || exit
-        #     ./ontodocker.sh start
-        # )
+        #start ontodocker
+        (   
+            echo $USE_EXTERNAL_PMD_DS_NETWORK
+            cd ontodocker || exit
+            ./ontodocker.sh start
+        )
         
     ;;
     
