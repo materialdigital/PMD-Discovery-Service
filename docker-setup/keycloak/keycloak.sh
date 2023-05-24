@@ -64,13 +64,15 @@ case "$1" in
         # this token is valid for 60 seconds
         # this token is generated only once
         
-        ACCESS_TOKEN=$(docker compose exec keycloak sh -c 'curl -s -k https://localhost:8443/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=admin-cli -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD| jq -r .access_token')
+        # ACCESS_TOKEN=$(docker compose exec keycloak sh -c 'curl -s -k https://localhost:8443/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=admin-cli -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD| jq -r .access_token')
+        ACCESS_TOKEN=$(docker compose exec keycloak sh -c 'curl -s -k http://localhost:8080/realms/$KEYCLOAK_REALM/protocol/openid-connect/token -d client_id=admin-cli -d grant_type=password -d username=$KEYCLOAK_ADMIN -d password=$KEYCLOAK_ADMIN_PASSWORD| jq -r .access_token')
         # echo $ACCESS_TOKEN
         
         # we need to export the access token so that it can be used inside the container
         export ACCESS_TOKEN
         
-        INITIAL_ACCESS_TOKEN=$(docker compose exec --env ACCESS_TOKEN keycloak sh -c 'curl -s -k -H "Authorization: Bearer $ACCESS_TOKEN" https://localhost:8443/admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 60 }" | jq -r .token')
+        # INITIAL_ACCESS_TOKEN=$(docker compose exec --env ACCESS_TOKEN keycloak sh -c 'curl -s -k -H "Authorization: Bearer $ACCESS_TOKEN" https://localhost:8443/admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 60 }" | jq -r .token')
+        INITIAL_ACCESS_TOKEN=$(docker compose exec --env ACCESS_TOKEN keycloak sh -c 'curl -s -k -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/admin/realms/$KEYCLOAK_REALM/clients-initial-access -H "Content-Type: application/json" -d "{ \"count\": 1, \"expiration\": 3600 }" | jq -r .token')
         echo "$INITIAL_ACCESS_TOKEN"
     ;;
     
