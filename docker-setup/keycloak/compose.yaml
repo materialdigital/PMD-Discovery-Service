@@ -13,9 +13,9 @@ services:
   keycloak:
     build:
       dockerfile: Dockerfile
-    command: ["start", "--optimized", "--http-enabled", "true"]
-    # command: 
-    #   - start-dev
+        #     command: ["start", "--optimized", "--http-enabled", "true"]
+    command:
+      - start-dev
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=keycloak-db
@@ -29,6 +29,7 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD
       - KEYCLOAK_CLIENT=admin-cli
       - KEYCLOAK_REALM=master
+      - KC_HOSTNAME=keycloak
     depends_on:
       - keycloak-db
     networks:
