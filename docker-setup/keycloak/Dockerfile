@@ -1,7 +1,16 @@
+# Workaround
+# Adding curl and jq to the keycloak image is a workaround for the following issue:
+# https://github.com/keycloak/keycloak/issues/20215
+# once the issue is resolved, we can remove this workaround
+# and use kcadm.sh instead of curl and jq
+
 FROM registry.access.redhat.com/ubi9 AS ubi-micro-build
 RUN mkdir -p /mnt/rootfs
 # Install curl and jq
 RUN dnf install --installroot /mnt/rootfs curl jq --releasever 9 --setopt install_weak_deps=false --nodocs -y; dnf --installroot /mnt/rootfs clean all
+
+# End of workaround
+
 
 FROM quay.io/keycloak/keycloak:latest as builder
 
