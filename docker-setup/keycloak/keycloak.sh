@@ -47,7 +47,7 @@ case "$1" in
         fi
         
         echo "Starting keycloak"
-        docker compose up -d
+        docker compose up -d --build
     ;;
     stop | down)
         echo "Stopping keycloak"
