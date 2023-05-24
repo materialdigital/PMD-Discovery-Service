@@ -18,5 +18,8 @@ FROM quay.io/keycloak/keycloak:latest
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 COPY --from=ubi-micro-build /mnt/rootfs /
 
+HEALTHCHECK --interval=5s CMD test "$(curl -k -s --fail https://localhost:8443/health/live | jq -r .status)" = "UP"
+# HEALTHCHECK --interval=5s --timeout=10s --start-period=5s CMD test "$(curl -k -s --fail https://localhost:8443/health/live | jq -r .status)" = "UP"
+
 ENV KC_HOSTNAME=localhost
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
