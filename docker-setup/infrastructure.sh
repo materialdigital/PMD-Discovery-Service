@@ -25,6 +25,8 @@ case "$1" in
             echo "Creating network pmd-ds"
             docker network create pmd-ds
         fi
+        USE_EXTERNAL_PMD_DS_NETWORK="true"
+        export USE_EXTERNAL_PMD_DS_NETWORK
         
         # #start global keycloak
 
