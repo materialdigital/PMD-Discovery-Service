@@ -41,6 +41,7 @@ case "$1" in
         done
 
         INITIAL_ACCESS_TOKEN="$(./keycloak.sh get-iat)"
+        export INITIAL_ACCESS_TOKEN
         
         echo "Initial Access Token: ${INITIAL_ACCESS_TOKEN}"
         
