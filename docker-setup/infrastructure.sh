@@ -27,14 +27,22 @@ case "$1" in
         fi
         
         # #start global keycloak
-        INITIAL_ACCESS_TOKEN=""
-        (
-            cd keycloak || exit
-            ./keycloak.sh start
-            INITIAL_ACCESS_TOKEN="$(./keycloak.sh get-iat)"
-        )
+
+        cd keycloak || exit 1
+        ./keycloak.sh start
+        # Wait until docker report keycloak as healthy
+        # by checking the output of docker compose ps with grep
+
+        while [ -z "$(docker compose ps keycloak | grep healthy)" ]; do
+            echo "Waiting for keycloak to start"
+            sleep 1
+        done
+
+        INITIAL_ACCESS_TOKEN="$(./keycloak.sh get-iat)"
         
         echo "Initial Access Token: ${INITIAL_ACCESS_TOKEN}"
+        
+        cd .. || exit 1
         
         # #start ontodocker
         # (
@@ -63,5 +71,12 @@ case "$1" in
         fi
     ;;
     
-    *) echo "Invalid argument: $1"; exit 1 ;;
+    # provide help
+    -h | --help | help | *)
+        echo "Usage: $0 [start|stop|clean]"
+        echo "  start: starts the infrastructure"
+        echo "  stop: stops the infrastructure"
+        echo "  clean: removes the infrastructure"
+    ;;
+
 esac
