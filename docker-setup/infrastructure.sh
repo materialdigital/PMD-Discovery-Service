@@ -60,7 +60,13 @@ case "$1" in
     
         (
             cd keycloak || exit
-            ./keycloak.sh stop
+            ./keycloak.sh down
+            # INITIAL_ACCESS_TOKEN=$(./keycloak.sh get_iat)
+        )
+
+        (
+            cd ontodocker || exit
+            ./ontodocker.sh down
             # INITIAL_ACCESS_TOKEN=$(./keycloak.sh get_iat)
         )
     ;;
